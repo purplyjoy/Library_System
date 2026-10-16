@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png"  href="logo.png">
+</head>
+<body>
+
+    <main class="main-content dashboard-main">
+
+        <h1 class="main-title"></h1>
+
+        <!--BORROW RECORDS-->
+        <section class="panel">
+        <header class="page-header">
+            <h1>Borrow Records</h1>
+            <button type="button" class="btn btn-primary" id="btnAddBorrow">+ New Borrow Record</button>
+        </header>
+        
+        <div class="toolbar">
+            <div class="search-wrap">
+            <input type="search" id="borrowSearch" placeholder="Search by book, borrower, or email...">
+            </div>
+            
+            <select id="borrowStatusFilter" aria-label="Filter by status">
+                <option value="all">All Statuses</option>
+                <option value="borrowed">Borrowed</option>
+                <option value="returned">Returned</option>
+                <option value="overdue">Overdue</option>
+            </select>
+        </div>
+
+            <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Borrower</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Book Title</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="borrowTableBody"></tbody>
+            </table>
+            </div>
+        </section>
+
+        <!--BOOK RECORDS-->
+        <section class="panel">
+        <header class="page-header">
+            <h1>Book Records</h1>
+            <button type="button" class="btn btn-primary" id="btnAddBook">+ New Book Record</button>
+        </header>
+
+        <div class="toolbar">
+            <div class="search-wrap">
+            <input type="search" id="bookSearch" placeholder="Search title, author, ISBN...">
+            </div>
+
+            <select id="bookCategoryFilter" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+            </select>
+
+            <label class="checkbox-label">
+            <input type="checkbox" id="showArchivedBooks">
+            Show archived
+            </label>
+        </div>
+
+        <div class="table-wrap">
+            <table class="data-table">
+            <thead>
+                <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Publisher</th>
+                <th>Year</th>
+                <th>Total</th>
+                <th>Available</th>
+                <th>Category</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="booksTableBody"></tbody>
+            </table>
+        </div>
+        </section>
+    </main>
+
+    <!--BORROW MODAL-->
+    <div class="modal-overlay borrow-modal-overlay" id="borrowModal">
+        <div class="modal borrow-modal">
+        <div class="modal-header">
+            <h2>New Borrow Record</h2>
+            <button class="modal-close" id="borrowModalClose">&times;</button>
+        </div>
+
+        <form id="borrowForm">
+            <div class="modal-body">
+            <div class="form-group">
+                <input type="text" id="borrower" placeholder="Borrower Name">
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input type="text" id="address" placeholder="Address">
+            </div>
+            <div class="form-group">
+                <select id="bookId" aria-label="Select a Book">
+                <option value="">Select a Book</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dueDate">Due Date</label>
+                <input type="date" id="dueDate">
+            </div>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="borrowModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <!--BOOK MODAL-->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal">
+        <div class="modal-header">
+            <h2>Add Book</h2>
+            <button class="modal-close" id="bookModalClose">&times;</button>
+        </div>
+        
+        <form id="bookForm">
+            <div class="modal-body">
+            <div class="form-group">
+                <input type="text" id="title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <input type="text" id="author" placeholder="Author">
+            </div>
+            <div class="form-group">
+                <input type="text" id="isbn" placeholder="ISBN">
+            </div>
+            <div class="form-group">
+                <input type="text" id="publisher" placeholder="Publisher">
+            </div>
+            <div class="form-group">
+                <input type="number" id="year" placeholder="Publication Year" min="1000">
+            </div>
+            <div class="form-group">
+                <input type="number" id="total" placeholder="Total Copies" min="0">
+            </div>
+            <div class="form-group">
+                <input type="number" id="available" placeholder="Available Copies" min="0">
+            </div>
+            <div class="form-group">
+                <select id="category" aria-label="Select a Category">
+                <option value="">Select a Category</option>
+                </select>
+            </div>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="bookModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <!--EDIT BORROW MODAL-->
+    <div class="modal-overlay" id="editBorrowModal">
+        <div class="modal">
+        <div class="modal-header">
+            <h2>Edit Borrow Record</h2>
+            <button class="modal-close" id="editBorrowModalClose">&times;</button>
+        </div>
+
+        <form id="editBorrowForm">
+            <div class="modal-body">
+            <div class="form-group">
+                <input type="text" id="editBorrower" placeholder="Borrower Name">
+            </div>
+            <div class="form-group">
+                <input type="email" id="editEmail" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input type="text" id="editAddress" placeholder="Address">
+            </div>
+            <div class="form-group">
+                <select id="editBookId" aria-label="Select a Book">
+                <option value="">Select a Book</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editDueDate">Due Date</label>
+                <input type="date" id="editDueDate">
+            </div>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="editBorrowModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <!--EDIT BOOK MODAL-->
+    <div class="modal-overlay" id="editBookModal">
+        <div class="modal">
+        <div class="modal-header">
+            <h2>Edit Book</h2>
+            <button class="modal-close" id="editBookModalClose">&times;</button>
+        </div>
+
+        <form id="editBookForm">
+            <div class="modal-body">
+            <div class="form-group">
+                <input type="text" id="editTitle" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <input type="text" id="editAuthor" placeholder="Author">
+            </div>
+            <div class="form-group">
+                <input type="text" id="editIsbn" placeholder="ISBN">
+            </div>
+            <div class="form-group">
+                <input type="text" id="editPublisher" placeholder="Publisher">
+            </div>
+            <div class="form-group">
+                <input type="number" id="editYear" placeholder="Publication Year" min="1000">
+            </div>
+            <div class="form-group">
+                <input type="number" id="editTotal" placeholder="Total Copies" min="0">
+            </div>
+            <div class="form-group">
+                <input type="number" id="editAvailable" placeholder="Available Copies" min="0">
+            </div>
+            <div class="form-group">
+                <select id="editCategory" aria-label="Select a Category">
+                <option value="">Select a Category</option>
+                </select>
+            </div>
+            </div>
+
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="editBookModalCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <!-- CONFIRM MODAL -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+        <div class="modal-header">
+            <h2>Confirm Action</h2>
+        </div>
+        <div class="modal-body">
+            <p id="confirmMessage">Are you sure?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="confirmCancel">Cancel</button>
+            <button type="button" class="btn btn-primary" id="confirmOk">OK</button>
+        </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

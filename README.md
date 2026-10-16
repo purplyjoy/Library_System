@@ -107,6 +107,6 @@ Library_System/
 ```
 - Kill it, replacing `<PID>` with the number from the last column (without the `<>`):
 ```bash
-    `taskkill /PID <PID> /F`
+    taskkill /PID <PID> /F
 ```
-    For example: `taskkill /PID 4240 /F`
+For example: taskkill /PID 4240 /F
